@@ -1,0 +1,45 @@
+{
+    "env": {
+        "browser": true,
+        "es2022": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:import/recommended",
+        "plugin:jsx-a11y/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "eslint-config-prettier"
+    ],
+    "settings": {
+        "react": {
+            "version": "detect"
+        },
+        "import/resolver": {
+            "node": {
+              "paths": ["src"],
+              "extensions": [".js", ".jsx", ".ts", ".tsx"]
+            }
+        }
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "prettier"
+    ],
+    "rules": {
+        "prettier/prettier": ["error", {
+            "semi": true,
+            "singleQuote": true,
+            "printWidth": 120,
+            "tabWidth": 4
+        }],
+        "react/react-in-jsx-scope": "off"
+    }
+}
