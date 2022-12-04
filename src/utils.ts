@@ -12,7 +12,7 @@ export function buf2base64url(buffer: ArrayBuffer) {
     return buf2base64(buffer).replace(/\//g, '_').replace(/\+/g, '-').replace(/=+$/, '');
 }
 
-export async function createHmac(secretKey: string, payload: unknown, encoding: Encoding) {
+export async function createHmac(secretKey: string, payload: string, encoding: Encoding) {
     const enc = new TextEncoder();
     const key = await crypto.subtle.importKey(
         'raw',
@@ -37,11 +37,10 @@ export async function createHmac(secretKey: string, payload: unknown, encoding: 
     }
 }
 
-function formatIfJSON(text: unknown) {
+function formatIfJSON(text: string) {
     try {
-        return JSON.parse(text as string);
+        return JSON.parse(text);
     } catch {
-        /* empty */
+        return text;
     }
-    return text;
 }

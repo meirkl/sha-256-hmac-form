@@ -10,7 +10,7 @@ const encodingOptions: { label: string; type: Encoding }[] = [
 ];
 
 function App() {
-    const [accessTokenSecret, setAccessTokenSecret] = useState('');
+    const [key, setKey] = useState('');
     const [payload, setPayload] = useState('');
     const [signature, setSignature] = useState('');
     const [encoding, setEncoding] = useState<Encoding>('hex');
@@ -18,23 +18,23 @@ function App() {
     const ref = createRef<HTMLFormElement>();
 
     useEffect(() => {
-        createHmacFromData();
+        createHmacFromUserInput();
     }, [encoding]);
 
     const onEnterPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === 'Enter' && e.shiftKey == false) {
+        if (e.key === 'Enter' && e.shiftKey === false) {
             onSubmit(e);
         }
     };
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        createHmacFromData();
+        createHmacFromUserInput();
     };
 
-    const createHmacFromData = async () => {
-        if (accessTokenSecret && payload) {
-            const _signature = await createHmac(accessTokenSecret, payload, encoding);
+    const createHmacFromUserInput = async () => {
+        if (key && payload) {
+            const _signature = await createHmac(key, payload, encoding);
             setSignature(_signature);
         }
     };
@@ -48,12 +48,7 @@ function App() {
             <h1 className="title">SHA-256 HMAC</h1>
             <form ref={ref} onSubmit={onSubmit}>
                 <div className="form">
-                    <input
-                        type="text"
-                        placeholder="key"
-                        value={accessTokenSecret}
-                        onChange={(event) => setAccessTokenSecret(event.target.value)}
-                    />
+                    <input type="text" placeholder="key" value={key} onChange={(event) => setKey(event.target.value)} />
                     <textarea
                         rows={10}
                         placeholder="payload"
@@ -62,7 +57,7 @@ function App() {
                         onKeyDown={onEnterPress}
                     />
                 </div>
-                <button type="submit" onClick={() => createHmacFromData()}>
+                <button type="submit" onClick={() => createHmacFromUserInput()}>
                     Sign SHA-256 HMAC
                 </button>
             </form>
