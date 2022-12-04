@@ -45,6 +45,7 @@ function App() {
 
     return (
         <div className="App">
+            <h1 className="title">SHA-256 HMAC</h1>
             <form ref={ref} onSubmit={onSubmit}>
                 <div className="form">
                     <input

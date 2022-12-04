@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+.title {
+  font-family: monospace;
+}
+
 .form {
   display: flex;
   flex-direction: column;
