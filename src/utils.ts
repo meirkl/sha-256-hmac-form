@@ -1,8 +1,18 @@
+export type Encoding = 'hex' | 'base64' | 'base64url';
+
 export function buf2hex(buffer: ArrayBuffer) {
-    return [...new Uint8Array(buffer)].map((x) => x.toString(16).padStart(2, '0')).join('');
+    return [...new Uint8Array(buffer)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
-export async function createHmac(secretKey: string, payload: unknown) {
+export function buf2base64(buffer: ArrayBuffer) {
+    return btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+}
+
+export function buf2base64url(buffer: ArrayBuffer) {
+    return buf2base64(buffer).replace(/\//g, '_').replace(/\+/g, '-').replace(/=+$/, '');
+}
+
+export async function createHmac(secretKey: string, payload: unknown, encoding: Encoding) {
     const enc = new TextEncoder();
     const key = await crypto.subtle.importKey(
         'raw',
@@ -16,7 +26,15 @@ export async function createHmac(secretKey: string, payload: unknown) {
         key,
         enc.encode(JSON.stringify(formatIfJSON(payload)).replace(/\//g, '\\/'))
     );
-    return buf2hex(signature);
+
+    switch (encoding) {
+        case 'base64':
+            return buf2base64(signature);
+        case 'base64url':
+            return buf2base64url(signature);
+        default:
+            return buf2hex(signature);
+    }
 }
 
 function formatIfJSON(text: unknown) {

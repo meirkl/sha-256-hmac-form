@@ -69,6 +69,10 @@ button:focus-visible {
   }
 }
 
+textarea {
+  resize: none;
+}
+
 input, 
 textarea {
   padding: 4px;
